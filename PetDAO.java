@@ -76,16 +76,7 @@ public class PetDAO {
         double price = sc.nextDouble();
         System.out.print("(boolean)Is Vaccinated (true/false): ");
         boolean isVaccinated = sc.nextBoolean();
-        try {
-            if (!isValidBooleanValue(isVaccinated)) {
-                throw new InvalidBooleanValueException("Input value is not true.");
-            }
-            
-        } catch (InvalidBooleanValueException e) {
-            System.out.println("Error: " + e.getMessage());
-            System.exit(1);
-            
-        }
+      
         sc.nextLine();
         System.out.print("Food Habits: ");
         String foodHabits = sc.nextLine();
@@ -118,6 +109,7 @@ public class PetDAO {
                 ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Pet p = new Pet();
+                p.setPetID(resultSet.getInt(1));
                 p.setPetCategory(resultSet.getString("PETCATEGORY"));
                 p.setPetType(resultSet.getString("petType"));
                 p.setColor(resultSet.getString("color"));
@@ -162,15 +154,7 @@ public class PetDAO {
         double new_price = sc.nextDouble();
         System.out.println("Enter the new vaccination status (true/false):");
         boolean new_status = sc.nextBoolean();
-        try {
-            if (!isValidBooleanValue(new_status)) {
-                throw new InvalidBooleanValueException("Input value is not true.");
-            }
-         
-        } catch (InvalidBooleanValueException e) {
-            System.out.println("Error: " + e.getMessage());
-            System.exit(1);
-        }
+        
 
         String sql = "UPDATE pets SET price = ?, isVaccinated = ? WHERE petid = ?";
         try (Connection con = getConnection(); PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -290,7 +274,5 @@ public class PetDAO {
     public static boolean isAlphabetic(String input) {
         return input.matches("^[a-zA-Z]+$");
     }
-    public static boolean isValidBooleanValue(boolean value) {
-        return value == true;
-    }
+    
 }
